@@ -1,54 +1,72 @@
+# Zabbix 7.2 com Docker Compose
 
-# Zabbix via Docker Compose
+Repositório para facilitar a implantação local ou em servidores do Zabbix 7.2 utilizando `docker-compose`. Inclui os principais componentes: servidor Zabbix, frontend web, banco de dados PostgreSQL e agente Zabbix.
 
-Repositório para facilitar a implantação do **Zabbix 7 LTS** utilizando **Docker Compose** com suporte a **PostgreSQL** como banco de dados e frontend via **NGINX + PHP**.
+## 🚀 Tecnologias
 
-> ✅ Projeto mantido por [Marcos Ferreira](https://github.com/marcosferreira)
+- [Zabbix 7.2](https://www.zabbix.com/)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- PostgreSQL 15
 
----
+## 📦 Estrutura dos serviços
 
-## 📦 Componentes
+- **postgres**: Banco de dados PostgreSQL usado pelo Zabbix.
+- **zabbix-server**: Servidor principal de monitoramento.
+- **zabbix-web**: Interface web baseada em Nginx + PHP.
+- **zabbix-agent**: Agente Zabbix para monitorar o próprio host.
 
-Este ambiente Docker Compose inclui:
+## 📁 Estrutura do projeto
 
-- PostgreSQL (banco de dados)
-- Zabbix Server
-- Zabbix Web (NGINX + PHP)
-- Suporte para `.env` com variáveis customizáveis
+```
 
----
+zabbix/
+├── docker-compose.yml
+├── data/
+│   └── postgres/             # Dados persistentes do banco
+├── zbx\_env/
+│   └── server/               # Configurações do Zabbix Server
 
-## 🚀 Como usar
+````
 
-### 1. Clone o repositório
+## ⚙️ Como usar
+
+1. Clone o repositório:
 
 ```bash
 git clone https://github.com/marcosferreira/zabbix.git
 cd zabbix
 ````
 
-### 2. Configure o arquivo `.env`
-
-Edite o arquivo `.env` com os parâmetros necessários. Exemplo:
-
-```env
-# Versão do Zabbix
-ZABBIX_VERSION=7.0.1
-ZABBIX_LOCAL_IMAGE_TAG_POSTFIX=
-
-# Banco de dados
-DB_SERVER_HOST=postgres
-POSTGRES_USER=zabbix
-POSTGRES_PASSWORD=zabbix
-POSTGRES_DB=zabbix
-
-# Web
-ZBX_SERVER_HOST=zabbix-server
-PHP_TZ=America/Sao_Paulo
-```
-
-### 3. Suba os containers
+2. Crie os diretórios para persistência:
 
 ```bash
-docker compose up -d
+mkdir -p ./data/postgres ./zbx_env/server
 ```
+
+3. Suba os containers:
+
+```bash
+docker-compose up -d
+```
+
+4. Acesse o frontend:
+
+* URL: [http://localhost:8080](http://localhost:8080)
+* Usuário padrão: `Admin`
+* Senha padrão: `zabbix`
+
+> ⚠️ Certifique-se de que as portas 8080 e 10051 estejam disponíveis no seu host.
+
+## 📝 Personalização
+
+* Para alterar configurações do Zabbix, edite os arquivos na pasta `zbx_env/server`.
+* Para trocar o fuso horário, edite a variável `PHP_TZ` no `docker-compose.yml`.
+
+## 📄 Licença
+
+Este projeto está sob a licença [MIT](LICENSE).
+
+---
+
+Feito com 💻 por [Marcos Ferreira](https://github.com/marcosferreira)
