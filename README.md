@@ -1,8 +1,4 @@
-Claro! Aqui está um exemplo de `README.md` para o seu repositório [`https://github.com/marcosferreira/zabbix`](https://github.com/marcosferreira/zabbix), assumindo que o repositório seja usado para subir o **Zabbix 7 via Docker Compose** com PostgreSQL. Adapte conforme necessário:
 
----
-
-````markdown
 # Zabbix via Docker Compose
 
 Repositório para facilitar a implantação do **Zabbix 7 LTS** utilizando **Docker Compose** com suporte a **PostgreSQL** como banco de dados e frontend via **NGINX + PHP**.
