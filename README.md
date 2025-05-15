@@ -1,87 +1,58 @@
-Aqui está um exemplo funcional de `docker-compose.yml` para rodar o **Zabbix 7.2** com os principais componentes: servidor, frontend (interface web), banco de dados PostgreSQL, e o Zabbix agent. Este exemplo é baseado nas imagens oficiais do Zabbix no Docker Hub.
+Claro! Aqui está um exemplo de `README.md` para o seu repositório [`https://github.com/marcosferreira/zabbix`](https://github.com/marcosferreira/zabbix), assumindo que o repositório seja usado para subir o **Zabbix 7 via Docker Compose** com PostgreSQL. Adapte conforme necessário:
 
-```yaml
-version: '3.5'
+---
 
-services:
-  postgres:
-    image: postgres:15
-    container_name: zabbix-postgres
-    environment:
-      POSTGRES_USER: zabbix
-      POSTGRES_PASSWORD: zabbix_pass
-      POSTGRES_DB: zabbix
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-    restart: unless-stopped
+````markdown
+# Zabbix via Docker Compose
 
-  zabbix-server:
-    image: zabbix/zabbix-server-pgsql:alpine-7.2-latest
-    container_name: zabbix-server
-    depends_on:
-      - postgres
-    environment:
-      DB_SERVER_HOST: postgres
-      POSTGRES_USER: zabbix
-      POSTGRES_PASSWORD: zabbix_pass
-      POSTGRES_DB: zabbix
-      ZBX_HISTORYSTORAGEURL: "http://zabbix-web:8080"
-    ports:
-      - "10051:10051"
-    volumes:
-      - ./zbx_env/server:/etc/zabbix
-    restart: unless-stopped
+Repositório para facilitar a implantação do **Zabbix 7 LTS** utilizando **Docker Compose** com suporte a **PostgreSQL** como banco de dados e frontend via **NGINX + PHP**.
 
-  zabbix-web:
-    image: zabbix/zabbix-web-nginx-pgsql:alpine-7.2-latest
-    container_name: zabbix-web
-    depends_on:
-      - zabbix-server
-    environment:
-      DB_SERVER_HOST: postgres
-      POSTGRES_USER: zabbix
-      POSTGRES_PASSWORD: zabbix_pass
-      POSTGRES_DB: zabbix
-      ZBX_SERVER_HOST: zabbix-server
-      PHP_TZ: America/Sao_Paulo
-    ports:
-      - "8080:8080"
-      - "8443:8443"
-    restart: unless-stopped
+> ✅ Projeto mantido por [Marcos Ferreira](https://github.com/marcosferreira)
 
-  zabbix-agent:
-    image: zabbix/zabbix-agent:alpine-7.2-latest
-    container_name: zabbix-agent
-    depends_on:
-      - zabbix-server
-    environment:
-      ZBX_SERVER_HOST: zabbix-server
-    restart: unless-stopped
+---
 
-volumes:
-  postgres:
+## 📦 Componentes
+
+Este ambiente Docker Compose inclui:
+
+- PostgreSQL (banco de dados)
+- Zabbix Server
+- Zabbix Web (NGINX + PHP)
+- Suporte para `.env` com variáveis customizáveis
+
+---
+
+## 🚀 Como usar
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/marcosferreira/zabbix.git
+cd zabbix
+````
+
+### 2. Configure o arquivo `.env`
+
+Edite o arquivo `.env` com os parâmetros necessários. Exemplo:
+
+```env
+# Versão do Zabbix
+ZABBIX_VERSION=7.0.1
+ZABBIX_LOCAL_IMAGE_TAG_POSTFIX=
+
+# Banco de dados
+DB_SERVER_HOST=postgres
+POSTGRES_USER=zabbix
+POSTGRES_PASSWORD=zabbix
+POSTGRES_DB=zabbix
+
+# Web
+ZBX_SERVER_HOST=zabbix-server
+PHP_TZ=America/Sao_Paulo
 ```
 
-### Instruções
+### 3. Suba os containers
 
-1. Salve esse conteúdo como `docker-compose.yml`.
-2. Crie os diretórios persistentes:
-
-   ```bash
-   mkdir -p ./data/postgres ./zbx_env/server
-   ```
-3. Inicie os serviços:
-
-   ```bash
-   docker-compose up -d
-   ```
-
-### Acesso ao Zabbix
-
-Após subir o ambiente, acesse:
-
-* **Frontend**: [http://localhost:8080](http://localhost:8080)
-* **Usuário padrão**: `Admin`
-* **Senha padrão**: `zabbix`
-
-Se quiser usar MySQL/MariaDB, posso adaptar para isso também. Deseja?
+```bash
+docker compose up -d
+```
