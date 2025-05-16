@@ -26,6 +26,7 @@ services:
       - "10050:10050"
     volumes:
       - ./zbx_env/server:/etc/zabbix
+      - ./zabbix_server.conf:/etc/zabbix/zabbix_server.conf
     restart: unless-stopped
 
   zabbix-web:
